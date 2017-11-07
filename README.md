@@ -39,8 +39,8 @@ new CoveredVideoPlayer({ // Props.
 
 Key | Type | Description | Required/Default
 --- | --- | --- | ---
-selector | string | A selector to pass to querySelector. | **requried**
-src | array | An array of objects used to build HTML `source` elements -- required keys for each object are `url` and `type` | **required**
+selector | string | A selector to pass to querySelector. | **required**
+src | array | An array of objects used to build HTML `source` elements. Required keys for each object are `url` and `type`. | **required**
 controls | bool | Show controls on the video? | default true
 loop | bool | Make the video loop when played? | default false
 muted | bool | Mute the video? | default true

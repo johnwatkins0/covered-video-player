@@ -3,6 +3,7 @@ class CoveredVideoPlayer {
     this.setUp(props);
 
     this.appendSourceToVideoElement = this.appendSourceToVideoElement.bind(this);
+    this.handleVideoClick = this.handleVideoClick.bind(this);
 
     this.run();
   }
@@ -87,7 +88,7 @@ class CoveredVideoPlayer {
       }
     `;
 
-    document.querySelector('head').append(styles);
+    document.querySelector('head').appendChild(styles);
   }
 
   shouldRender() {
@@ -101,14 +102,19 @@ class CoveredVideoPlayer {
     );
   }
 
+  handleVideoClick(event) {
+    event.preventDefault(); // Some browsers have default video.pause() behavior.
+
+    if (this.videoElement.paused === true) {
+      this.videoElement.play();
+    } else {
+      this.videoElement.pause();
+    }
+  }
+
   addEventListeners() {
-    this.videoElement.addEventListener('click', () => {
-      if (this.videoElement.paused) {
-        this.videoElement.play();
-      } else {
-        this.videoElement.pause();
-      }
-    });
+    this.videoElement.addEventListener('click', this.handleVideoClick);
+    this.videoElement.addEventListener('touchstart', this.handleVideoClick);
 
     this.videoElement.addEventListener('play', () => {
       this.root.classList.add('playing');
@@ -130,7 +136,7 @@ class CoveredVideoPlayer {
       const sourceElement = document.createElement('SOURCE');
       sourceElement.setAttribute('src', src.url);
       sourceElement.setAttribute('type', src.type);
-      this.videoElement.append(sourceElement);
+      this.videoElement.appendChild(sourceElement);
     } catch (e) {
       // Do nothing.
     }
@@ -159,7 +165,7 @@ class CoveredVideoPlayer {
 
   createVideoContainer() {
     this.videoContainer = document.createElement('DIV');
-    this.videoContainer.append(this.videoElement);
+    this.videoContainer.appendChild(this.videoElement);
     this.videoContainer.setAttribute('class', `${this.videoContainerClass}`);
   }
 
@@ -169,8 +175,8 @@ class CoveredVideoPlayer {
     this.createVideoContainer();
 
     this.root.innerHTML = '';
-    this.root.append(this.coverElement);
-    this.root.append(this.videoContainer);
+    this.root.appendChild(this.coverElement);
+    this.root.appendChild(this.videoContainer);
   }
 }
 

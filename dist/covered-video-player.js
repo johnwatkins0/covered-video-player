@@ -97,6 +97,7 @@ var CoveredVideoPlayer = function () {
     this.setUp(props);
 
     this.appendSourceToVideoElement = this.appendSourceToVideoElement.bind(this);
+    this.handleVideoClick = this.handleVideoClick.bind(this);
 
     this.run();
   }
@@ -147,7 +148,7 @@ var CoveredVideoPlayer = function () {
 
       styles.innerHTML = '\n      ' + this.selector + ' {\n        position: relative;\n      }\n\n      .' + this.coverClass + ' {\n        position: absolute;\n        top: 0;\n        right: 0;\n        bottom: 0;\n        left: 0;\n        z-index: 2;\n        transition: opacity .4s;\n        background: none;\n        border: none;\n        display: block;\n        width: 100%;\n        pointer-events: none;\n      }\n\n      ' + this.selector + '.playing .' + this.coverClass + ' {\n        display: none;\n      }\n\n      @supports (opacity: 0) {\n        ' + this.selector + '.playing .' + this.coverClass + ' {\n          display: block;\n          opacity: 0;\n        }\n      }\n\n      .' + this.videoContainerClass + ' video {\n        width: 100%;\n        height: auto;\n        position: relative;\n        z-index: 1;\n        cursor: pointer;\n      }\n    ';
 
-      document.querySelector('head').append(styles);
+      document.querySelector('head').appendChild(styles);
     }
   }, {
     key: 'shouldRender',
@@ -155,17 +156,23 @@ var CoveredVideoPlayer = function () {
       return 'HTMLVideoElement' in window && 'CSS' in window && 'supports' in CSS && CSS.supports('pointer-events', 'none') && this.root && this.src.length;
     }
   }, {
+    key: 'handleVideoClick',
+    value: function handleVideoClick(event) {
+      event.preventDefault(); // Some browsers have default video.pause() behavior.
+
+      if (this.videoElement.paused === true) {
+        this.videoElement.play();
+      } else {
+        this.videoElement.pause();
+      }
+    }
+  }, {
     key: 'addEventListeners',
     value: function addEventListeners() {
       var _this = this;
 
-      this.videoElement.addEventListener('click', function () {
-        if (_this.videoElement.paused) {
-          _this.videoElement.play();
-        } else {
-          _this.videoElement.pause();
-        }
-      });
+      this.videoElement.addEventListener('click', this.handleVideoClick);
+      this.videoElement.addEventListener('touchstart', this.handleVideoClick);
 
       this.videoElement.addEventListener('play', function () {
         _this.root.classList.add('playing');
@@ -188,15 +195,15 @@ var CoveredVideoPlayer = function () {
         var sourceElement = document.createElement('SOURCE');
         sourceElement.setAttribute('src', src.url);
         sourceElement.setAttribute('type', src.type);
-        this.videoElement.append(sourceElement);
+        this.videoElement.appendChild(sourceElement);
       } catch (e) {
-        this.maybeRenderFallback();
+        // Do nothing.
       }
     }
   }, {
     key: 'maybeRenderFallback',
     value: function maybeRenderFallback() {
-      if (this.root && (this.fallbackCover || this.cover)) {
+      if (this.root && (this.fallbackCover.length || this.cover.length)) {
         this.root.classList.add('fallback');
         this.root.innerHTML = this.fallbackCover || this.cover;
       }
@@ -215,14 +222,14 @@ var CoveredVideoPlayer = function () {
     value: function createCoverElement() {
       this.coverElement = document.createElement('BUTTON');
       this.coverElement.innerHTML = this.cover;
-      this.coverElement.setAttribute('class', 'CoveredVideoPlayer__cover');
+      this.coverElement.setAttribute('class', '' + this.coverClass);
     }
   }, {
     key: 'createVideoContainer',
     value: function createVideoContainer() {
       this.videoContainer = document.createElement('DIV');
-      this.videoContainer.append(this.videoElement);
-      this.videoContainer.setAttribute('class', 'CoveredVideoPlayer__video');
+      this.videoContainer.appendChild(this.videoElement);
+      this.videoContainer.setAttribute('class', '' + this.videoContainerClass);
     }
   }, {
     key: 'render',
@@ -232,8 +239,8 @@ var CoveredVideoPlayer = function () {
       this.createVideoContainer();
 
       this.root.innerHTML = '';
-      this.root.append(this.coverElement);
-      this.root.append(this.videoContainer);
+      this.root.appendChild(this.coverElement);
+      this.root.appendChild(this.videoContainer);
     }
   }]);
 
