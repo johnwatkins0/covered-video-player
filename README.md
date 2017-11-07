@@ -48,3 +48,10 @@ cover | string | A string representation of HTML to use as the video cover. | de
 fallbackCover | string | A string representation of HTML to use if rendering fails. | default ''
 coverClass | string | A CSS class to apply to the cover. | default CoveredVideoPlayer__cover
 videoContainerClass | string | A CSS class to apply to the div holding the video. | default CoveredVideoPlayer__video
+
+To-do
+height,
+width,
+onPlay,
+onPause,
+minWindowWidth,

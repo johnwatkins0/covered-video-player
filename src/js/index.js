@@ -1,3 +1,5 @@
+import isAutoplaySupported from './isAutoplaySupported';
+
 class CoveredVideoPlayer {
   constructor(props) {
     this.setUp(props);
@@ -8,8 +10,8 @@ class CoveredVideoPlayer {
     this.run();
   }
 
-  run() {
-    if (this.shouldRender()) {
+  async run() {
+    if (await this.shouldRender()) {
       this.putStylesInHead();
       this.render();
       this.addEventListeners();
@@ -61,6 +63,8 @@ class CoveredVideoPlayer {
     styles.innerHTML = `
       ${this.selector} {
         position: relative;
+        min-height: 320px;
+        overflow: hidden;
       }
 
       .${this.coverClass} {
@@ -76,7 +80,10 @@ class CoveredVideoPlayer {
         display: block;
         width: 100%;
         pointer-events: none;
-				padding: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       ${this.selector}.playing .${this.coverClass} {
@@ -90,6 +97,13 @@ class CoveredVideoPlayer {
         }
       }
 
+      .${this.videoContainerClass} {
+        min-height: 320px;
+        background: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
       .${this.videoContainerClass} video {
         width: 100%;
@@ -97,7 +111,7 @@ class CoveredVideoPlayer {
         position: relative;
         z-index: 1;
         cursor: pointer;
-				display: block;
+        display: block;
       }
     `;
 
@@ -105,15 +119,20 @@ class CoveredVideoPlayer {
   }
 
   shouldRender() {
-    return (
-      window.innerWidth > this.minWindowWidth &&
-      'HTMLVideoElement' in window &&
-      'CSS' in window &&
-      'supports' in CSS &&
-      CSS.supports('pointer-events', 'none') &&
-      this.root &&
-      this.src.length
-    );
+    return new Promise(async (resolve) => {
+      const autoplaySupported = await isAutoplaySupported();
+
+      resolve(
+        autoplaySupported === true &&
+          window.innerWidth > this.minWindowWidth &&
+          'HTMLVideoElement' in window &&
+          'CSS' in window &&
+          'supports' in CSS &&
+          CSS.supports('pointer-events', 'none') &&
+          this.root &&
+          this.src.length,
+      );
+    });
   }
 
   handleVideoClick(event) {
