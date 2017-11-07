@@ -173,6 +173,7 @@ var CoveredVideoPlayer = function () {
 
       this.videoElement.addEventListener('click', this.handleVideoClick);
       this.videoElement.addEventListener('touchstart', this.handleVideoClick);
+      this.coverElement.addEventListener('keypress', this.handleVideoClick);
 
       this.videoElement.addEventListener('play', function () {
         _this.root.classList.add('playing');
