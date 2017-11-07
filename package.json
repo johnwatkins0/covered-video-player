@@ -1,6 +1,6 @@
 {
   "name": "covered-video-player",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An HTML5 video player with any HTML superimposed as a play button.",
   "main": "src/js/index.js",
   "repository": "https://github.com/johnwatkins0/covered-video-player.git",
@@ -19,9 +19,14 @@
     "webpack": "^3.8.1"
   },
   "babel": {
-    "presets": ["env", "stage-0"]
+    "presets": [
+      "env",
+      "stage-0"
+    ]
   },
   "eslintConfig": {
-    "extends": ["johnwatkins0"]
+    "extends": [
+      "johnwatkins0"
+    ]
   }
 }
