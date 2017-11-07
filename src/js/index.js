@@ -28,6 +28,11 @@ class CoveredVideoPlayer {
     videoContainerClass,
     muted,
     fallbackCover,
+    height,
+    width,
+    onPlay,
+    onPause,
+    minWindowWidth,
   }) {
     try {
       this.selector = selector;
@@ -40,6 +45,11 @@ class CoveredVideoPlayer {
       this.controls = typeof controls === 'undefined' ? true : controls;
       this.loop = typeof loop === 'undefined' ? false : loop;
       this.muted = typeof muted === 'undefined' ? true : muted;
+      this.height = typeof height === 'undefined' ? null : height;
+      this.width = typeof width === 'undefined' ? null : width;
+      this.onPlay = typeof onPlay === 'undefined' ? () => null : onPlay;
+      this.onPause = typeof onPause === 'undefined' ? () => null : onPause;
+      this.minWindowWidth = typeof minWindowWidth === 'undefined' ? 0 : Number(minWindowWidth);
     } catch (e) {
       this.maybeRenderFallback();
     }
@@ -66,6 +76,7 @@ class CoveredVideoPlayer {
         display: block;
         width: 100%;
         pointer-events: none;
+				padding: 0;
       }
 
       ${this.selector}.playing .${this.coverClass} {
@@ -79,12 +90,14 @@ class CoveredVideoPlayer {
         }
       }
 
+
       .${this.videoContainerClass} video {
         width: 100%;
         height: auto;
         position: relative;
         z-index: 1;
         cursor: pointer;
+				display: block;
       }
     `;
 
@@ -93,6 +106,7 @@ class CoveredVideoPlayer {
 
   shouldRender() {
     return (
+      window.innerWidth > this.minWindowWidth &&
       'HTMLVideoElement' in window &&
       'CSS' in window &&
       'supports' in CSS &&
@@ -119,15 +133,24 @@ class CoveredVideoPlayer {
 
     this.videoElement.addEventListener('play', () => {
       this.root.classList.add('playing');
+      this.onPlay();
     });
 
     this.videoElement.addEventListener('pause', () => {
       this.root.classList.remove('playing');
+      this.onPause();
     });
 
-    if (this.loop) {
+    this.videoElement.addEventListener('canplay', () => {
+      this.root.innerHTML = '';
+      this.root.appendChild(this.videoContainer);
+      this.root.appendChild(this.coverElement);
+    });
+
+    if (this.loop !== true) {
       this.videoElement.addEventListener('ended', () => {
         this.root.classList.remove('playing');
+        this.onPause();
       });
     }
   }
@@ -147,14 +170,31 @@ class CoveredVideoPlayer {
     if (this.root && (this.fallbackCover.length || this.cover.length)) {
       this.root.classList.add('fallback');
       this.root.innerHTML = this.fallbackCover || this.cover;
+      this.root.removeAttribute('id');
     }
   }
 
   createVideoElement() {
     this.videoElement = document.createElement('VIDEO');
-    this.videoElement.setAttribute('controls', this.controls);
-    this.videoElement.setAttribute('loop', this.loop);
-    this.videoElement.setAttribute('muted', this.muted);
+
+    if (this.controls) {
+      this.videoElement.setAttribute('controls', true);
+    }
+
+    if (this.loop) {
+      this.videoElement.setAttribute('loop', true);
+    }
+
+    if (this.muted) {
+      this.videoElement.setAttribute('muted', true);
+    }
+
+    if (this.height) {
+      this.videoElement.setAttribute('height', this.height);
+    }
+    if (this.width) {
+      this.videoElement.setAttribute('width', this.width);
+    }
     this.src.forEach(this.appendSourceToVideoElement);
   }
 
@@ -174,10 +214,6 @@ class CoveredVideoPlayer {
     this.createVideoElement();
     this.createCoverElement();
     this.createVideoContainer();
-
-    this.root.innerHTML = '';
-    this.root.appendChild(this.coverElement);
-    this.root.appendChild(this.videoContainer);
   }
 }
 
