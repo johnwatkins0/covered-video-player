@@ -7,6 +7,9 @@ class CoveredVideoPlayer {
     this.appendSourceToVideoElement = this.appendSourceToVideoElement.bind(this);
     this.handleVideoClick = this.handleVideoClick.bind(this);
 
+    this.coverCreated = false;
+    this.videoCreated = false;
+
     this.run();
   }
 
@@ -161,9 +164,19 @@ class CoveredVideoPlayer {
     });
 
     this.videoElement.addEventListener('canplay', () => {
-      this.root.innerHTML = '';
-      this.root.appendChild(this.videoContainer);
-      this.root.appendChild(this.coverElement);
+      if (this.coverCreated === false && this.videoCreated === false) {
+        this.root.innerHTML = '';
+      }
+
+      if (this.videoCreated === false) {
+        this.root.appendChild(this.videoContainer);
+        this.videoCreated = true;
+      }
+
+      if (this.coverCreated === false) {
+        this.root.appendChild(this.coverElement);
+        this.coverCreated = true;
+      }
     });
 
     if (this.loop !== true) {
