@@ -155,7 +155,7 @@ class CoveredVideoPlayer {
     this.videoElement.setAttribute('controls', this.controls);
     this.videoElement.setAttribute('loop', this.loop);
     this.videoElement.setAttribute('muted', this.muted);
-    [...this.src].forEach(this.appendSourceToVideoElement);
+    this.src.forEach(this.appendSourceToVideoElement);
   }
 
   createCoverElement() {
