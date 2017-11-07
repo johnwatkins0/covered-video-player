@@ -132,12 +132,12 @@ class CoveredVideoPlayer {
       sourceElement.setAttribute('type', src.type);
       this.videoElement.append(sourceElement);
     } catch (e) {
-      this.maybeRenderFallback();
+      // Do nothing.
     }
   }
 
   maybeRenderFallback() {
-    if (this.root && (this.fallbackCover || this.cover)) {
+    if (this.root && (this.fallbackCover.length || this.cover.length)) {
       this.root.classList.add('fallback');
       this.root.innerHTML = this.fallbackCover || this.cover;
     }
@@ -154,13 +154,13 @@ class CoveredVideoPlayer {
   createCoverElement() {
     this.coverElement = document.createElement('BUTTON');
     this.coverElement.innerHTML = this.cover;
-    this.coverElement.setAttribute('class', 'CoveredVideoPlayer__cover');
+    this.coverElement.setAttribute('class', `${this.coverClass}`);
   }
 
   createVideoContainer() {
     this.videoContainer = document.createElement('DIV');
     this.videoContainer.append(this.videoElement);
-    this.videoContainer.setAttribute('class', 'CoveredVideoPlayer__video');
+    this.videoContainer.setAttribute('class', `${this.videoContainerClass}`);
   }
 
   render() {
