@@ -20,7 +20,7 @@ Example:
 ```Javascript
 import CoveredVideoPlayer from 'covered-video-player';
 
-new CoveredVideoPlayer.default({
+new CoveredVideoPlayer({ // Props.
 	selector: '#video-container'
 	src: [
 		{
