@@ -6,3 +6,5 @@ before_script:
 node_js:
   - stable
   - "6"
+after_script:
+  - killall node
