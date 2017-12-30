@@ -8,6 +8,8 @@
   "scripts": {
     "start":
       "parcel example/src/index.html -d example -o --public-url /covered-video-player/example/",
+    "start-bg":
+      "parcel example/src/index.html -d example -o --public-url /covered-video-player/example/ &",
     "build":
       "parcel build example/src/index.html -d example --public-url /covered-video-player/example/",
     "lint": "eslint src",
@@ -32,6 +34,7 @@
     "puppeteer": "^0.13.0"
   },
   "dependencies": {
+    "jest-cli": "^22.0.4",
     "prop-types": "^15.6.0"
   }
 }

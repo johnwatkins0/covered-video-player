@@ -1,8 +1,7 @@
 language: node_js
 cache: yarn
 before_script:
-  - npm install
-  - npm start
+  - npm run start-bg
 node_js:
   - stable
   - "6"
