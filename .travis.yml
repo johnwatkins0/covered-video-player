@@ -1,5 +1,8 @@
 language: node_js
 cache: yarn
+before_script:
+  - npm install
+  - npm run develop
 node_js:
   - stable
   - "6"
