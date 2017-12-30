@@ -7,6 +7,10 @@
 	  content="width=device-width, height=device-height, initial-scale=1, user-scalable=0" />
 
 	<style>
+		main {
+			max-width: 768px;
+			margin: 0 auto;
+		}
 		.cover {
 			position: absolute;
 			top: 0;
@@ -37,20 +41,10 @@
 	</style>
 
 	<body>
-
-		<div id="video-player"></div>
-
-		<script type="text/javascript">
-			window.addEventListener('load', function() {
-				new CoveredVideoPlayer.default({
-					selector: '#video-player',
-					src: [{
-						url: 'https://media.w3.org/2010/05/sintel/trailer.mp4',
-						type: 'video/mp4',
-					}, ],
-					cover: '<div class="cover"><h1>This is the cover.</h1><h2>Play</h2></div>',
-					fallbackCover: '<div class="cover"><h1>This is the cover.</h1></div>',
-				});
-			});
-		</script>
-	<script type="text/javascript" src="dist/covered-video-player.min.js"></script></body>
+		<main>
+			<div id="video-player">
+				<h1>Fallback</h1>
+			</div>
+		</main>
+		<script src="./index.js"></script>
+	</body>
