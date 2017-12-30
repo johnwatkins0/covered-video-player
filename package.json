@@ -1,12 +1,15 @@
 {
   "name": "covered-video-player",
   "version": "0.0.3",
-  "description": "An HTML5 video player with any HTML superimposed as a play button.",
+  "description":
+    "An HTML5 video player with any HTML superimposed as a play button.",
   "main": "src/index.js",
   "repository": "https://github.com/johnwatkins0/covered-video-player.git",
   "scripts": {
-    "start": "parcel example/src/index.html -d example -o --public-url /covered-video-player/example/",
-    "build": "parcel build example/src/index.html -d example --public-url /covered-video-player/example/",
+    "start":
+      "parcel example/src/index.html -d example -o --public-url /covered-video-player/example/ &",
+    "build":
+      "parcel build example/src/index.html -d example --public-url /covered-video-player/example/",
     "lint": "eslint src",
     "prepare": "npm run build",
     "pretest": "npm run lint",
